@@ -61,7 +61,6 @@ Guidance of using Twpy :
     list_sample = to_list(followers_data)
 
 
-Supported methods :
 
 .. csv-table:: Supported methods
     :header: "method", "description"
