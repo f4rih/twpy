@@ -46,11 +46,9 @@ Guidance of using Twpy :
     tc = TwpyClient()
 
     # get user followers, limited up to 50
-    # proxy support available:
-    #       example : proxy="127.0.0.1:8080"
-    # interval: sleep between each request
-    #       example : interval=0 (no sleep)
-    followers_data = tc.get_followers(username="elonmusk", limit=50)
+    followers_data = tc.get_followers(username="elonmusk", limit=50, proxy="127.0.0.1:8080", interval=1)
+    # interval : delay between each request, default is 0 for no delay
+    # proxy : send traffic through proxy, default is none
 
     # convert result to pandas data frame, json and list
     # pandas
