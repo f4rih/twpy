@@ -1,0 +1,13 @@
+# ignore pycharm files
+.idea/
+.idea/vcs.xml
+
+# ignore venv
+venv/
+
+# ignore mac cache
+.DS_Store/
+
+# pipenv
+Pipfile
+Pipfile.lock
