@@ -13,7 +13,7 @@ Features
 
 
 Installation
---------
+------------
 Manual install via git :
 
 .. code-block:: bash
