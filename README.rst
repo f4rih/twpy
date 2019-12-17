@@ -1,6 +1,7 @@
 Twpy
-[![Downloads](https://pepy.tech/badge/twpy/week)](https://pepy.tech/project/twpy/week)
 ========
+
+.. image:: https://pepy.tech/badge/twpy
 
 Twitter High level scraper for humans.
 
