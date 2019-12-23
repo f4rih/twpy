@@ -1,7 +1,10 @@
 
 # Grabber Engine
+import time
+from datetime import datetime
+from ..exceptions import QueryError, ParameterRequired
 from .request import RequestHandler
-from ..config.config import BASE_URL, MOBILE_URL
+from ..config.config import BASE_URL, MOBILE_URL, TIMELINE_WITH_TOKEN_QUERY
 from ..utils import extract_cursor, extract_ff, extract_timeline_cursor, extract_timeline, extract_profile
 from time import sleep
 
@@ -18,7 +21,6 @@ def follower_following(
 	:param type_:
 	:param proxy:
 	:param interval:
-	:param user_id:
 	:return:
 	"""
 	result: list = []
@@ -53,6 +55,8 @@ def follower_following(
 					continue
 			else:
 				break
+		else:
+			return result
 		# interval
 		sleep(interval)
 
@@ -69,40 +73,31 @@ def timeline(username: str, limit: int = 0, proxy: str = None, interval: int = 0
 	:return:
 	"""
 	result: list = []
-	cursor: str = str()
-	first_request = True
+	cursor = "-1"
 	has_more = True
 	req = RequestHandler(user_agent="TIMELINE", ret="json")
 	if proxy:
 		req.proxy = proxy
 
-	while True:
-		if has_more is False:
-			break
-		if first_request:
-			url = BASE_URL+f"/i/search/timeline?vertical=default&src=unkn&include_available_features=1&lang=en" \
-						f"&include_entities=1&max_position=-1&reset_error_state=false&f=tweets&q=+from:{username} "
-			res = req.get(url)
-			first_request = False
-			cursor, has_more = extract_timeline_cursor(response=res)
-		else:
-			url = BASE_URL+f"/i/search/timeline?vertical=default&src=unkn&include_available_features=1&lang=en" \
-						f"&include_entities=1&max_position={cursor}&reset_error_state=false&f=tweets&q=+from:{username}"
-			res = req.get(url)
+	while has_more:
+
+		url = BASE_URL+TIMELINE_WITH_TOKEN_QUERY+f"+from:{username}"
+		url = url.replace("%TOKEN%", cursor)
+		res = req.get(url)
 		if res:
 			cursor, has_more = extract_timeline_cursor(response=res)
-			if cursor:
-				extracted_tweets = extract_timeline(res['items_html'])
-				result.extend(extracted_tweets)
-				# check limitation
-				if limit > 0:
-					if len(result) > limit:
-						return result[:limit]
-				else:
-					sleep(interval)
-					continue
+			extracted_tweets = extract_timeline(res['items_html'])
+			result.extend(extracted_tweets)
+			# check limitation
+			if limit > 0:
+				if len(result) > limit:
+					return result[:limit]
 			else:
-				break
+				sleep(interval)
+				continue
+		else:
+			return result
+
 		sleep(interval)
 
 	return result
@@ -122,3 +117,83 @@ def profile(username: str, proxy: str):
 		return extract_profile(res)
 	else:
 		return None
+
+
+def search(username: str = "", since: str = "", until: str = "", query: str = "", limit: int = 0, verified: bool = False, proxy: str = "", interval: int = 0):
+	"""Advanced search engine"""
+
+	cursor: str = "-1"
+	has_more: bool = True
+	result: list = []
+	req = RequestHandler(user_agent="TIMELINE", ret="json")
+	if proxy:
+		req.proxy = proxy
+
+	if since:
+		since = int(time.mktime(datetime.strptime(since, "%Y-%m-%d").timetuple()))
+
+	if until:
+		if len(until) == 4:
+			until = f"{until}-01-01"
+
+	query_structure = {
+		"from": f"+from:{username}",
+		"since": f"+since:{since}",
+		"verified": ":verified",
+		"until": f"+until:{until}",
+		"query": f"+{query}"
+	}
+
+	if username and query:
+		""" not allowed """
+		raise QueryError("`username` and `query` parameter not allowed together.")
+
+	if since and until:
+		""" not allowed """
+		raise QueryError("`since` and `until` parameter not allowed together.")
+
+	url = BASE_URL+TIMELINE_WITH_TOKEN_QUERY
+	url = url.replace("%TOKEN%", cursor)
+
+	# if there was username or query
+	if username or query:
+		if username:
+			url += query_structure['from']
+		else:
+			url += query_structure['query']
+
+	# if username and query aren't set properly raise error
+	else:
+		raise ParameterRequired("`username` or `query` required for search.")
+
+	if since or until:
+		if since:
+			url += query_structure['since']
+		elif until:
+			url += query_structure['until']
+
+	if verified:
+		url += query_structure['verified']
+
+	while has_more:
+		res = req.get(url=url)
+		if res:
+			cursor, has_more = extract_timeline_cursor(response=res)
+			if cursor:
+				extracted_tweets = extract_timeline(res['items_html'])
+				result.extend(extracted_tweets)
+				url = url.replace("%TOKEN%", cursor)
+				# check limitation
+				if limit > 0:
+					if len(result) > limit:
+						return result[:limit]
+				else:
+					sleep(interval)
+					continue
+			else:
+				break
+			sleep(interval)
+		else:
+			return result
+
+	return result
