@@ -1,5 +1,7 @@
 Twpy
 ========
+.. image:: https://pepy.tech/project/twpy
+.. image:: https://pepy.tech/project/twpy/week
 
 Twitter High level scraper for humans.
 
