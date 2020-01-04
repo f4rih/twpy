@@ -19,7 +19,7 @@ Installation
 
 Manual install via git :
 
-``` {.bash}
+```bash
 $ git clone https://github.com/0x0ptim0us/twpy.git
 $ cd twpy
 $ python setup.py install
@@ -27,7 +27,7 @@ $ python setup.py install
 
 Install using pip:
 
-``` {.bash}
+```bash
 $ pip install twpy
 # or
 $ python -m pip install twpy
