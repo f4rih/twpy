@@ -157,17 +157,32 @@ def extract_profile(html: str) -> object:
 	# get user id
 	user_id = navbar.find('div', attrs={'class': 'ProfileNav'})["data-user-id"]
 	# find tweets count
-	li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--tweets is-active'})
-	tweet_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
+	try:
+		li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--tweets is-active'})
+		tweet_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
+	except AttributeError:
+		tweet_count = 0
+
 	# find followings
-	li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--following'})
-	following_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
+	try:
+		li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--following'})
+		following_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
+	except AttributeError:
+		following_count = 0
+
 	# find followers
-	li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--followers'})
-	follower_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
+	try:
+		li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--followers'})
+		follower_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
+	except AttributeError:
+		follower_count = 0
+
 	# find likes
-	li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--favorites'})
-	like_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
+	try:
+		li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--favorites'})
+		like_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
+	except AttributeError:
+		like_count = 0
 	#
 	result.append(Profile(
 		name=name,
