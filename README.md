@@ -38,70 +38,76 @@ Usage
 
 Create Twpy object :
 
-``` {.python}
->>> from twpy import TwpyClient
->>> from twpy.serializers import to_pandas  
->>>
->>> # create twpy client object
->>> tc = TwpyClient()
->>> # or you can pass proxy
->>> tc = TwpyClient(proxy="127.0.0.1:8080")
+```python
+from twpy import TwpyClient 
+
+# create twpy client object
+tc = TwpyClient()
+```
+
+with proxy :
+
+```python
+# or you can pass proxy
+tc = TwpyClient(proxy="127.0.0.1:8080")
 ```
 
 Get twpy current version :
 
-``` {.python}
->>> tc.__version__
-'1.2.2'
+```python
+tc.__version__
+# '1.2.2'
 ```
+
 
 Get user followers:
 
-``` {.python}
->>> # get user followers, limited up to 50
->>> # interval : delay between each request, default is 0 for no delay
->>> # proxy : send traffic through proxy, default is none
->>> followers_data = tc.get_followers(username="elonmusk", limit=50, interval=1)
+```python
+# get user followers, limited up to 50
+# interval : delay between each request, default is 0 for no delay
+# proxy : send traffic through proxy, default is none
+followers_data = tc.get_followers(username="elonmusk", limit=50, interval=1)
 ```
 
 Get user timeline:
 
-``` {.python}
->>> tweets = tc.get_timeline(username="elonmusk", limit=50)
+```python
+tweets = tc.get_timeline(username="elonmusk", limit=50)
 ```
 
 Get user profile:
 
-``` {.python}
->>> user_info = tc.get_user(username="elonmusk")
+```python
+user_info = tc.get_user(username="elonmusk")
 ```
 
 Convert result object to other data structures :
 
-``` {.python}
->>> # convert result to pandas data frame, json and list
->>> # pandas
->>> pandas_sample = to_pandas(followers_data)
->>> # json
->>> json_sample = to_json(followers_data)
->>> # list
->>> list_sample = to_list(followers_data)
+```python
+from twpy.serializers import to_pandas, to_json, to_list
+# convert result to pandas data frame, json and list
+# pandas
+pandas_sample = to_pandas(followers_data)
+# json
+json_sample = to_json(followers_data)
+# list
+list_sample = to_list(followers_data)
 ```
 
 Search example:
 
-``` {.python}
->>> # search user tweets until 2015
->>> tweets = tc.search(username="elonmusk", until="2015")
+```python
+# search user tweets until 2015
+tweets = tc.search(username="elonmusk", until="2015")
 
->>> # add limit and interval
->>> tweets = tc.search(username="elonmusk", until="2015", limit=100, interval=1)
+# add limit and interval
+tweets = tc.search(username="elonmusk", until="2015", limit=100, interval=1)
 
->>> # search tweets contains `love` word
->>> tweets = tc.search(query="love", limit=100, interval=1)
+# search tweets contains `love` word
+tweets = tc.search(query="love", limit=100, interval=1)
 
->>> # search tweets which contains `love` word and were tweeted since 2015-01-01
->>> tweets = tc.search(query="love", since="2015-01-01", limit=10)
+# search tweets which contains `love` word and were tweeted since 2015-01-01
+tweets = tc.search(query="love", since="2015-01-01", limit=10)
 ```
 
   # Supported methods
