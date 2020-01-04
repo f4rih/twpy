@@ -1,4 +1,4 @@
-VERSION = "1.2.1"
+VERSION = "1.2.2"
 BASE_URL = "https://twitter.com/"
 MOBILE_URL = "https://mobile.twitter.com/"
 TIMELINE_WITH_TOKEN_QUERY = "i/search/timeline?vertical=default&src=unkn&include_available_features=1&include_entities=1" \

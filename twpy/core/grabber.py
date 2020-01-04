@@ -26,12 +26,13 @@ def follower_following(
 	result: list = []
 	cursor: str = str()
 	first_request: bool = True
+	has_more: bool = True
 	# mode = FF -> followers/followings user-agent
 	req = RequestHandler(user_agent="FF")
 	# if proxy enabled set it
 	if proxy:
 		req.proxy = proxy
-	while True:
+	while has_more:
 		if first_request:
 			url = MOBILE_URL + f"/{username}/{type_}/?lang=en"
 			res = req.get(url)
@@ -43,18 +44,21 @@ def follower_following(
 			# extract cursor
 			cursor = extract_cursor(res)
 			if cursor:
-				# parse followers/followings
-				extracted_ff = extract_ff(res)
-				result.extend(extracted_ff)
-				# if there was limit
-				if limit > 0:
-					if len(result) > limit:
-						return result[:limit]
-				else:
-					sleep(interval)
-					continue
+				has_more = True
 			else:
-				break
+				has_more = False
+
+			# parse followers/followings
+			extracted_ff = extract_ff(res)
+			result.extend(extracted_ff)
+			# if there was limit
+			if limit > 0:
+				if len(result) > limit:
+					return result[:limit]
+			else:
+				sleep(interval)
+				continue
+
 		else:
 			return result
 		# interval

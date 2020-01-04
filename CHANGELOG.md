@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2020-01-04
+
+### Changed
+
+- Fixed tweet count bug .
+- Moved from reStructured Text to MarkDown for README .
+- Fixed bug in get_followers/get_followings method, which doesn't get first page tweets .
+
 ## [1.2.1] - 2019-12-23
 
 ### Added

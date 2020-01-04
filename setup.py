@@ -27,7 +27,7 @@ setup(
 
 	version=TWPY_VERSION,
 	description='Twitter High level scraper for humans. ',
-	long_description=read_file('README.rst'),
+	long_description=read_file('README.md'),
 	license='MIT',
 	author='Fardin Allahverdinazhand',
 	author_email='0x0ptim0us@gmail.com',
