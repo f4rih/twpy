@@ -1,5 +1,5 @@
 from .config.config import VERSION
-from .core.grabber import follower_following, timeline, profile, search
+from .core.grabber import follower_following, timeline, profile, search, get_user_id
 
 
 class TwpyClient(object):
@@ -66,3 +66,11 @@ class TwpyClient(object):
 		:return:
 		"""
 		return search(username=username, since=since, until=until, query=query, limit=limit, verified=verified, proxy=self.proxy, interval=interval)
+
+	def get_user_id(self, username: str) -> str:
+		"""
+		Get user_id of user
+		:param username
+		:return: str
+		"""
+		return get_user_id(username=username, proxy=self.proxy)
