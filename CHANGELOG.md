@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.4] - 2020-02-25
+
+### Added
+- get_user_id method added .
+
+### Changed
+
+- Fixed get_user problem with new style of twitter .
+- joined_date, birthday, like_count removed from get_user data model due to twitter changes .
+
+
 ## [1.2.2] - 2020-01-04
 
 ### Changed
