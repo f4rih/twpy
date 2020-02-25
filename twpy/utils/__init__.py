@@ -13,6 +13,7 @@ def header_maker(mode: str) -> str:
 	user_agents = {
 		"FF": "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.17 Safari/537.36",
 		"TIMELINE": "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36",
+		"MOBILE": "Opera/9.80 (Android 4.1.2; Linux; Opera Mobi/ADR-1305251841) Presto/2.11.355 Version/12.10"
 	}
 
 	return user_agents[mode]
@@ -124,66 +125,39 @@ def extract_profile(html: str) -> object:
 	result: list = []
 
 	soup = BeautifulSoup(html, 'html.parser')
-	left_side = soup.find('div', attrs={'class': 'ProfileHeaderCard'})
 	# get name
-	name = left_side.find('a', attrs={'class': 'ProfileHeaderCard-nameLink u-textInheritColor js-nav'}).text
+	name = soup.find('div', class_='fullname').text.strip()
 	# verified account
-	verified = left_side.find('span', attrs={'class': 'Icon Icon--verified'})
+	verified = soup.find('img', attrs={'alt': 'Verified Account'})
 	if verified:
 		verified = "true"
 	else:
 		verified = "false"
 	# protected account
-	protected = left_side.find('span', attrs={'class': 'Icon Icon--protected'})
+	protected = soup.find('div', class_='protected')
 	if protected:
 		protected = "true"
 	else:
 		protected = "false"
 	# screen name
-	username = left_side.find('b', attrs={'class': 'u-linkComplex-target'}).text
+	username = soup.find('span', class_='screen-name').text.strip()
 	# bio
-	bio = left_side.find('p', attrs={'class': 'ProfileHeaderCard-bio u-dir'}).text
+	bio = soup.find('div', class_='bio').text.strip()
 	# location
-	location = left_side.find('div', attrs={'class': 'ProfileHeaderCard-location'}).text.strip()
+	location = soup.find('div', class_='location').text.strip()
 	# url
-	url = left_side.find('span', attrs={'class': 'ProfileHeaderCard-urlText u-dir'}).text.strip()
-	# joined date
-	joined_date = left_side.find('span', attrs={'class': 'ProfileHeaderCard-joinDateText js-tooltip u-dir'})['title']
-	# birthday
-	birthday = left_side.find('span', attrs={'class': 'ProfileHeaderCard-birthdateText u-dir'}).text.strip()
-
-	# navbar
-	navbar = soup.find('div', attrs={'class': 'ProfileCanopy-nav'})
-	# get user id
-	user_id = navbar.find('div', attrs={'class': 'ProfileNav'})["data-user-id"]
-	# find tweets count
-	try:
-		li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--tweets is-active'})
-		tweet_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
-	except AttributeError:
+	url = soup.find('div', class_='url').text.strip()
+	# find profile info
+	info = soup.find_all('div', class_='statnum')
+	if info:
+		tweet_count = info[0].text
+		following_count = info[1].text
+		follower_count = info[2].text
+	else:
 		tweet_count = 0
-
-	# find followings
-	try:
-		li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--following'})
-		following_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
-	except AttributeError:
 		following_count = 0
-
-	# find followers
-	try:
-		li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--followers'})
-		follower_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
-	except AttributeError:
 		follower_count = 0
 
-	# find likes
-	try:
-		li_ = navbar.find('li', attrs={'class': 'ProfileNav-item ProfileNav-item--favorites'})
-		like_count = li_.find('span', attrs={'class': 'ProfileNav-value'}).text.strip()
-	except AttributeError:
-		like_count = 0
-	#
 	result.append(Profile(
 		name=name,
 		verified=verified,
@@ -192,12 +166,8 @@ def extract_profile(html: str) -> object:
 		bio=bio,
 		location=location,
 		url=url,
-		joined_date=joined_date,
-		birthday=birthday,
-		user_id=user_id,
 		tweet_count=tweet_count,
 		following_count=following_count,
-		follower_count=follower_count,
-		like_count=like_count
+		follower_count=follower_count
 	))
 	return result
