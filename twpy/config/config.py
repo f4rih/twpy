@@ -1,4 +1,4 @@
-VERSION = "1.2.4"
+VERSION = "1.2.5"
 BASE_URL = "https://twitter.com/"
 MOBILE_URL = "https://mobile.twitter.com/"
 APIV1_URL = "https://help.twitter.com/api/v1/username_lookups?username="

@@ -1,8 +1,7 @@
 import codecs
 from setuptools import setup
-from twpy.config.config import VERSION
 
-TWPY_VERSION = VERSION
+TWPY_VERSION = '1.2.5'
 TWPY_DOWNLOAD = ('https://github.com/0x0ptim0us/twpy/tarball/' + TWPY_VERSION)
 
 
