@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 from ..exceptions import QueryError, ParameterRequired
 from .request import RequestHandler
-from ..config.config import BASE_URL, MOBILE_URL, TIMELINE_WITH_TOKEN_QUERY
+from ..config.config import BASE_URL, MOBILE_URL, TIMELINE_WITH_TOKEN_QUERY, APIV1_URL
 from ..utils import extract_cursor, extract_ff, extract_timeline_cursor, extract_timeline, extract_profile
 from time import sleep
 
@@ -112,7 +112,7 @@ def profile(username: str, proxy: str):
 	get user profile
 	"""
 	
-	req = RequestHandler(user_agent="TIMELINE")
+	req = RequestHandler(user_agent="MOBILE")
 	if proxy:
 		req.proxy = proxy
 	url = BASE_URL+username+"/?lang=en"
@@ -121,6 +121,22 @@ def profile(username: str, proxy: str):
 		return extract_profile(res)
 	else:
 		return None
+
+
+def get_user_id(username: str, proxy: str):
+	"""
+	get user id
+	"""
+
+	req = RequestHandler(user_agent="TIMELINE", ret="json")
+	if proxy:
+		req.proxy = proxy
+	url = APIV1_URL + username
+	res = req.get(url=url)
+	if res:
+		return res.get('user_id', '')
+	else:
+		return ''
 
 
 def search(username: str = "", since: str = "", until: str = "", query: str = "", limit: int = 0, verified: bool = False, proxy: str = "", interval: int = 0):
