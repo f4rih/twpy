@@ -72,13 +72,9 @@ class Profile:
                  bio: str,
                  location: str,
                  url: str,
-                 joined_date: str,
-                 birthday: str,
-                 user_id: int,
                  tweet_count: int,
                  following_count: int,
-                 follower_count: int,
-                 like_count) -> None:
+                 follower_count: int) -> None:
         """
         User profile data model
         """
@@ -89,10 +85,6 @@ class Profile:
         self.bio = bio
         self.location = location
         self.url = url
-        self.joined_date = joined_date
-        self.birthday = birthday
-        self.user_id = user_id
         self.tweet_count = tweet_count
         self.following_count = following_count
         self.follower_count = follower_count
-        self.like_count = like_count
