@@ -28,9 +28,9 @@ $ python setup.py install
 Install using pip:
 
 ```bash
-$ pip install twpy
+$ pip3 install twpy
 # or
-$ python -m pip install twpy
+$ python3 -m pip install twpy
 ```
 
 Usage
