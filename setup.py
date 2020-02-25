@@ -50,5 +50,10 @@ setup(
 		'beautifulsoup4',
 		'pandas'
 	],
+	setup_requires=[
+		'requests',
+		'beautifulsoup4',
+		'pandas'
+	],
 
 )
